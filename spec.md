@@ -213,19 +213,17 @@ Products are the core element in a marketplace. Each product listing MUST contai
 > A product MAY include the broad group tag, one or more subtags, or both.
 
 ```text
-electronics   smartphone laptop tablet camera audio wearable component
+electronics   hardware smartphone laptop tablet camera audio wearable component
 fashion       menswear womenswear footwear accessory jewelry
 home          furniture kitchen decor appliance storage
 beauty        skincare makeup haircare fragrance
 sports        fitness outdoor cycling water team
 toys          boardgame videogame plush construction
 books         fiction nonfiction comic textbook
-collectibles  card coin figure art
-pet           food toy accessory care
+collectibles  card coin art
 automotive    part accessory tool
-bitcoin       hardwarewallet miner node lightning
-nostr         relay client plugin badge
-digital       software course ebook template music
+digital       software course ebook
+foodbev       snack pantry beverage coffee tea condiment supplement staple dairy
 ```
 
 **Guidelines**

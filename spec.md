@@ -1,4 +1,3 @@
-
 Marketplace Protocol
 ---------------------------
 
@@ -207,7 +206,36 @@ Products are the core element in a marketplace. Each product listing MUST contai
    - Products can refer to one o multiple collections using `a` tags, whether or not they are part of it, for discoverability purposes.
    - Categories ("t" tags) aid in discovery and organization
 
-4. Location Support:
+## Standardized Product Category Tags (`t`)
+
+> **Goal:** Give clients and merchants a shared starting point for discovery while leaving plenty of space for future additions.  
+> All values **MUST** be single, lowercase ASCII words.  
+> A product MAY include the broad group tag, one or more subtags, or both.
+
+```text
+electronics   smartphone laptop tablet camera audio wearable component
+fashion       menswear womenswear footwear accessory jewelry
+home          furniture kitchen decor appliance storage
+beauty        skincare makeup haircare fragrance
+sports        fitness outdoor cycling water team
+toys          boardgame videogame plush construction
+books         fiction nonfiction comic textbook
+collectibles  card coin figure art
+pet           food toy accessory care
+automotive    part accessory tool
+bitcoin       hardwarewallet miner node lightning
+nostr         relay client plugin badge
+digital       software course ebook template music
+```
+
+**Guidelines**
+
+**Keep it lean.** Aim for <20 broad groups; niche categories should be proposed in future PRs.
+**Stability first.** Avoid renaming existing tags—add new ones instead.
+Clients MAY treat unknown tags as opaque strings but SHOULD prefer the table above for filtering and UI grouping.
+
+
+5. Location Support:
    - Optional location data aids in local marketplace features, they can point to a collection event to inherit it's value
    - Geohash enables precise location-based searches, they can point to a collection event to inherit it's value
 

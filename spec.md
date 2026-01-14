@@ -126,7 +126,7 @@ Products are the core element in a marketplace. Each product listing MUST contai
   - `spec`: Product specifications `[<key>, <value>]`, can appear multiple times
 
 - Versioning:
-  - `supersedes`: Product version reference `"30402::<d>"` indicating that this product replaces a previous product listing. MAY appear at most once.
+  - `supersedes`: Product version reference `"30402:<pubkey>:<d>"` indicating that this product is intended to replace a previous product listing. MAY appear at most once.
 
 - Media:
   - `image`: Product images `[<url>, <dimensions>, <sorting-order>]`, MAY appear multiple times
@@ -186,7 +186,7 @@ Products are the core element in a marketplace. Each product listing MUST contai
     // References
     ["shipping_option", "<30406|30405>:<pubkey>:<d-tag>", "<extra-cost>"],  // Shipping options or collection, MAY appear multiple times
     ["a", "30405:<pubkey>:<d-tag>"]  // Product collection
-    ["supersedes", "30402::<d>"] // optional: previous product identifier
+    ["supersedes", "30402:<pubkey>:<d>"] // optional: previous product listing address
   ]
 }
 ```
@@ -216,16 +216,9 @@ Products are the core element in a marketplace. Each product listing MUST contai
   
 #### Product identity and mutability
 
-Implementations SHOULD treat the following as identity-defining aspects of a product listing:
+Clients MAY apply their own policies to determine when a listing update should be treated as a new product versus an in-place update. As a general guideline, if the underlying item/service being sold materially changes (e.g., a different item, variant, ingredients, or core specifications), merchants SHOULD publish a new product listing with a new `d` tag.
 
-- The human-readable product description in `content`
-- The `title` tag
-- The `summary` tag, when present
-- The primary `image` tags used to render the product
-
-Substantial changes to these identity-defining fields (for example, replacing the product with a different item, or completely changing its core description and imagery) SHOULD be published as a new product listing event with a new `d` tag.
-
-When a new listing replaces a previous one, clients SHOULD include a `supersedes` tag pointing to the prior product identifier (`"30402::<d>"`). Operational fields such as `price`, `stock`, shipping-related tags, and other non-identity metadata MAY be updated in place on the same product listing without resetting social context.
+When publishing a new listing intended to replace a prior one, merchants MAY include a `supersedes` tag referencing the prior listing address (`"30402:<pubkey>:<d>"`). Clients MAY use `supersedes` as an advisory signal to manage deprecation, continuity, and display (including optional review/history roll-ups). This specification does not define enforcement or validation requirements for supersession chains.
 
 ### Product Collection (Kind: 30405)
 A specialized event type using [NIP-51](51.md) like list format to organize related products into groups. Collections allow merchants or any user to create meaningful product groupings and share common attributes that products can also reference, establishing one-to-many relationships.
@@ -786,7 +779,7 @@ Total Score = (Thumb × 0.5) + (0.5 × (∑(Category Ratings) ÷ Number of Categ
    - Scores support fractional values between 0-1
    - Custom categories can be added
 2. Versioned Products:
-   - When a product listing supersedes another via a `supersedes` tag, clients MAY display review and rating history from previous versions alongside the current listing, but review events SHOULD remain logically attached to the specific product reference they were created for.
+   - When a product listing supersedes another via a `supersedes` tag, clients MAY display review and rating history from previous versions alongside the current listing. Review events SHOULD remain logically attached to the specific product reference they were created for. Any roll-up or aggregation behavior is client-defined.
 
 ## 6. Implementation Guidelines
 

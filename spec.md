@@ -93,11 +93,28 @@ Applications implementing this NIP MUST handle preferences as follows:
    - Buyer sends order
    - Wait for merchant's payment request
 
-Buyers can verify merchant preferences by:
-- Checking kind `31990` events for recommended applications
-- Checking kind `0` events for payment preferences
+Clients SHOULD automatically resolve merchant preferences before presenting checkout or payment actions to the user. This includes checking kind `31989` events authored by the merchant that recommend kind `31990` applications or services, and checking the merchant's kind `0` event for `payment_preference` tags.
 
-This verification helps buyers follow merchant-approved paths and avoid potential scams or poor experiences.
+Clients SHOULD present the recommended path directly in the user experience and MAY expose the underlying verification details for advanced users, debugging, or auditability.
+
+This helps users follow merchant-approved paths and avoid potential scams or poor experiences without requiring manual event inspection.
+
+### Client Attribution
+
+Clients SHOULD include a [NIP-89](89.md) `client` tag on marketplace events they publish, create, assist with, or broadcast on behalf of a user. The tag identifies the application that created, assisted with, or broadcast the event. For example: `["client", "Gamma Markets", "31990:<app-pubkey>:<app-id>", "wss://relay.example.com"]`.
+
+This helps compatible clients improve user experience by:
+- showing which app created an order, listing, receipt, review, shipping update, status update, or other marketplace event;
+- deep-linking users back into the originating app when appropriate;
+- applying app-specific rendering or checkout assistance;
+- improving debugging and support for merchants and buyers;
+- distinguishing direct user-authored events from service-assisted events.
+
+The `client` tag MUST NOT be treated as proof of merchant authorization, payment validity, product authenticity, order validity, or service endorsement. The event author, signatures, merchant-authored preferences, payment proofs, and protocol-defined tags remain authoritative.
+
+Missing or malformed `client` tags MUST NOT make otherwise valid marketplace events invalid. Clients MAY treat them as reduced attribution.
+
+This use of NIP-89 is separate from merchant application preferences. Kind `31989` and kind `31990` merchant recommendations are for merchant-approved application or service routing. `client` tags are for event attribution, UX continuity, debugging, and support. Clients MUST NOT make them consensus-critical.
 
 ## 3. Events and Kinds
 
